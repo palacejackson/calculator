@@ -1,3 +1,7 @@
+// calculator should not evaluate more than a single pair of numbers at a time.
+// should evaluate the first pair of numbers, display the result of that calculation and
+// use that result as the first number in the new calculation, along with the next operator.
+
 class Calculator {
   constructor(previousOperandTextInput, currentOperandTextInput) {
     this.previousOperandTextInput = previousOperandTextInput;
@@ -5,49 +9,55 @@ class Calculator {
     this.clear()
   }
 
+  // clear wipes out existing data
   clear() {
     this.currentOperand = ''
     this.previousOperand = ''
     this.operator = undefined
   }
 
+  // remove last digit
   delete() {
     this.currentOperand = this.currentOperand.toString().slice(0, -1)
   }
 
+  // select max one operator at a time
   chooseOperator(operator) {
     if (this.currentOperand === '') return
+    // use previous result as the first number in new calculation
     if (this.previousOperand !== '') {
-      this.compute()
+      this.calculate()
     }
     this.operator = operator
-    console.log(this.operator)
     this.previousOperand = this.currentOperand
     this.currentOperand = ''
   }
 
-  compute() {
-    let computation;
+  // executed on equals
+  calculate() {
+    let calculation;
     let previous = parseFloat(this.previousOperand);
     let current = parseFloat(this.currentOperand);
     if (isNaN(previous) || isNaN(current)) return
-    switch (this.operator) {
+    switch (this.operator){
       case '+':
-        computation = previous + current
+        calculation = previous + current
         break
       case '-':
-        computation = previous - current
+        calculation = previous - current
         break
+      case '/':
       case '÷':
-        computation = previous / current
+        calculation = previous / current
         break
+      case 'x':
       case '*':
-        computation = previous * current
+        calculation = previous * current
         break
       default:
         return
     }
-    this.currentOperand = computation
+    this.currentOperand = calculation
     this.operator = undefined
     this.previousOperand = ''
   }
@@ -58,37 +68,36 @@ class Calculator {
   }
 
   formatDisplayNumber(number) {
-    const numberToString = number.toString()
+    const stringNumber = number.toString()
     // select numbers before decimal
-    const beforeDecimalDigits = parseFloat(numberToString.split('.')[0])
+    const beforeDecimalDigits = parseFloat(stringNumber.split('.')[0])
     // select numbers after decimal
-    const afterDecimalDigits = numberToString.split('.')[1]
+    const afterDecimalDigits = stringNumber.split('.')[1]
     // format whole integer to be displayed
+    // if no digits before decimal then nothing to display, else display with commas
     let displayInteger
-    console.log(afterDecimalDigits);
-    // if no digits before decimal then nothing to display, or display with commas
     if (isNaN(beforeDecimalDigits)) {
       displayInteger = ''
     } else {
       displayInteger = beforeDecimalDigits.toLocaleString('en', { maximumFractionDigits: 0})
     }
-    // if numbers after decimal, concatenate before and after numbers with '.'
+    // if numbers present after decimal, concatenate before and after numbers with '.'
     if (afterDecimalDigits != null) {
-    return `${displayInteger}.${afterDecimalDigits}`
+      return `${displayInteger}.${afterDecimalDigits}`
     } else {
       return displayInteger
     }
   }
 
   updateDisplay() {
-    this.currentOperandTextInput.innerText =
-      this.formatDisplayNumber(this.currentOperand)
+    this.currentOperandTextInput.innerText = this.formatDisplayNumber(this.currentOperand)
+
+    // show equation in upper row on selecting operator
     if (this.operator != null) {
       this.previousOperandTextInput.innerText =
       `${this.formatDisplayNumber(this.previousOperand)} ${this.operator}`
-      console.log(this.previousOperandTextInput.innerText)
     } else {
-      this.previousOperand = ''
+      this.previousOperandTextInput.innerText = ''
     }
   }
 }
@@ -118,7 +127,7 @@ operatorButtons.forEach(operator => {
 });
 
 equalButton.addEventListener ('click', () => {
-  calculator.compute();
+  calculator.calculate();
   calculator.updateDisplay();
 })
 
@@ -130,4 +139,29 @@ clearAllButton.addEventListener ('click', () => {
 deleteButton.addEventListener ('click', () => {
   calculator.delete();
   calculator.updateDisplay();
+})
+
+window.addEventListener ('keyup', (e) => {
+  let keyValue = e.key
+  if ((keyValue >= 0 && keyValue < 10 || keyValue ===  '.' )) {
+    calculator.appendNumber(keyValue)
+    calculator.updateDisplay()
+  } else if(keyValue === 'Enter') {
+    calculator.calculate()
+    calculator.updateDisplay()
+  } else if(keyValue === 'Escape') {
+    calculator.clear()
+    calculator.updateDisplay()
+  } else if(keyValue === 'Delete') {
+    calculator.delete()
+    calculator.updateDisplay()
+  } else if(keyValue === '+' ||
+            keyValue === '-' ||
+            keyValue === '÷' ||
+            keyValue === '*' ||
+            keyValue === 'x' ||
+            keyValue === '/') {
+      calculator.chooseOperator(keyValue)
+      calculator.updateDisplay()
+    }
 })
