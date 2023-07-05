@@ -48,7 +48,7 @@ class Calculator {
         break
       case '/':
       case '÷':
-        calculation = previous / current
+        current !== 0 ? calculation = previous / current : calculation = "cannot divide by 0"
         break
       case 'x':
       case '*':
@@ -64,7 +64,14 @@ class Calculator {
 
   appendNumber(number) {
     if (number === '.' && this.currentOperand.includes('.')) return
+    if (number === '+/-' && this.currentOperand === '') return
     this.currentOperand = this.currentOperand.toString() + number.toString()
+  }
+
+  prependPlusMinus(symbol) {
+    if (symbol === '+/-' && this.currentOperand === '') return
+    this.currentOperand = parseFloat(this.currentOperand) * -1
+    console.log(this.currentOperand);
   }
 
   formatDisplayNumber(number) {
@@ -107,6 +114,7 @@ const currentOperandTextInput = document.querySelector('[data-current-operand]')
 const numberButtons = document.querySelectorAll('[data-number');
 const operatorButtons = document.querySelectorAll('[data-operation]');
 const equalButton = document.querySelector('[data-equals]');
+const plusMinusButton = document.querySelector('[data-plus-minus]');
 const deleteButton = document.querySelector('[data-delete]');
 const clearAllButton = document.querySelector('[data-clear-all');
 
@@ -122,9 +130,15 @@ numberButtons.forEach(button => {
 operatorButtons.forEach(operator => {
   operator.addEventListener ('click', () => {
     calculator.chooseOperator(operator.innerText);
-    calculator.updateDisplay;
+    calculator.updateDisplay();
   })
 });
+
+plusMinusButton.addEventListener('click', (e) => {
+  calculator.prependPlusMinus(e.target.innerText);
+  calculator.updateDisplay();
+  console.log(e.target.innerText);
+})
 
 equalButton.addEventListener ('click', () => {
   calculator.calculate();
@@ -133,7 +147,7 @@ equalButton.addEventListener ('click', () => {
 
 clearAllButton.addEventListener ('click', () => {
   calculator.clear();
-  calculator.updateDisplay()
+  calculator.updateDisplay();
 })
 
 deleteButton.addEventListener ('click', () => {
@@ -141,12 +155,13 @@ deleteButton.addEventListener ('click', () => {
   calculator.updateDisplay();
 })
 
+// keyboard functionality
 window.addEventListener ('keyup', (e) => {
   let keyValue = e.key
   if ((keyValue >= 0 && keyValue < 10 || keyValue ===  '.' )) {
     calculator.appendNumber(keyValue)
     calculator.updateDisplay()
-  } else if(keyValue === 'Enter') {
+  } else if(keyValue === 'Enter' || keyValue === "=") {
     calculator.calculate()
     calculator.updateDisplay()
   } else if(keyValue === 'Escape') {
@@ -163,5 +178,8 @@ window.addEventListener ('keyup', (e) => {
             keyValue === '/') {
       calculator.chooseOperator(keyValue)
       calculator.updateDisplay()
-    }
+  } else if(e.code === 'Backslash') {
+    calculator.prependPlusMinus('+/-')
+    calculator.updateDisplay()
+  }
 })
