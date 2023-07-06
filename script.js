@@ -9,7 +9,7 @@ class Calculator {
     this.clear()
   }
 
-  // clear wipes out existing data
+  // wipe out existing data
   clear() {
     this.currentOperand = ''
     this.previousOperand = ''
@@ -33,7 +33,7 @@ class Calculator {
     this.currentOperand = ''
   }
 
-  // executed on equals
+  // execute on equals
   calculate() {
     let calculation;
     let previous = parseFloat(this.previousOperand);
@@ -46,10 +46,15 @@ class Calculator {
       case '-':
         calculation = previous - current
         break
-      // TODO: show error message if dividing by 0
+      // show error message if dividing by 0
       case '/':
       case '÷':
-        current !== 0 ? calculation = previous / current : calculation = "cannot divide by 0"
+        if (current !== 0) {
+          calculation = previous / current
+         } else {
+          alert("cannot divide by 0")
+          calculation = ''
+         }
         break
       case 'x':
       case '*':
@@ -71,7 +76,6 @@ class Calculator {
   prependPlusMinus(symbol) {
     if (symbol === '+/-' && this.currentOperand === '') return
     this.currentOperand = parseFloat(this.currentOperand) * -1
-    console.log(this.currentOperand);
   }
 
   formatDisplayNumber(number) {
@@ -97,8 +101,8 @@ class Calculator {
   }
 
   processOutput(output) {
+    // display any error messages
     if (/^[a-zA-Z]/.test(output)) {
-      console.log(output)
       return output
     } else {
       return this.formatDisplayNumber(output)
@@ -107,7 +111,6 @@ class Calculator {
 
   updateDisplay() {
     this.currentOperandTextInput.innerText = this.processOutput(this.currentOperand)
-    console.log(typeof this.currentOperand)
     // show equation in upper row on selecting operator
     if (this.operator != null) {
       this.previousOperandTextInput.innerText =
