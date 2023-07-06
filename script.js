@@ -97,8 +97,8 @@ class Calculator {
   }
 
   processOutput(output) {
-    if (/^([a-z] 0)*$/.test(output)) {
-      console.log(output);
+    if (/^[a-zA-Z]/.test(output)) {
+      console.log(output)
       return output
     } else {
       return this.formatDisplayNumber(output)
