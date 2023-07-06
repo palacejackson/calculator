@@ -1,0 +1,35 @@
+.footer-info {
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 24px;
+  margin-top: 20px;
+  color: rgb(79, 78, 78);
+  transition: 0.3s;
+}
+
+.name {
+  padding: 10px;
+}
+
+a {
+  color: rgb(79, 78, 78);
+  text-decoration: none;
+}
+
+a:hover {
+  color: rgba(248, 57, 187, 0.8);
+}
+
+.fa-brands {
+  font-size: 40px;
+  color: rgb(79, 78, 78);
+  transition: 0.3s;
+  padding: 10px
+}
+
+.fa-brands:hover {
+    color: rgba(248, 57, 187, 0.8)
+}
