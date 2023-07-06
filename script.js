@@ -46,6 +46,7 @@ class Calculator {
       case '-':
         calculation = previous - current
         break
+      // TODO: show error message if dividing by 0
       case '/':
       case '÷':
         current !== 0 ? calculation = previous / current : calculation = "cannot divide by 0"
@@ -64,7 +65,6 @@ class Calculator {
 
   appendNumber(number) {
     if (number === '.' && this.currentOperand.includes('.')) return
-    if (number === '+/-' && this.currentOperand === '') return
     this.currentOperand = this.currentOperand.toString() + number.toString()
   }
 
@@ -96,9 +96,18 @@ class Calculator {
     }
   }
 
-  updateDisplay() {
-    this.currentOperandTextInput.innerText = this.formatDisplayNumber(this.currentOperand)
+  processOutput(output) {
+    if (/^([a-z] 0)*$/.test(output)) {
+      console.log(output);
+      return output
+    } else {
+      return this.formatDisplayNumber(output)
+    }
+  }
 
+  updateDisplay() {
+    this.currentOperandTextInput.innerText = this.processOutput(this.currentOperand)
+    console.log(typeof this.currentOperand)
     // show equation in upper row on selecting operator
     if (this.operator != null) {
       this.previousOperandTextInput.innerText =
