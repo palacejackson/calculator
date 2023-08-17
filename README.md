@@ -1,5 +1,6 @@
 # Calculator
-**[Live Preview](https://palacejackson.github.io/calculator/)**
+**[Try it out here :)](https://palacejackson.github.io/calculator/)**
+
 A basic online calculator built as part of [The Odin Project](https://www.theodinproject.com/lessons/foundations-calculator) Foundations Course project
 
 ## Features
