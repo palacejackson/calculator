@@ -179,7 +179,7 @@ window.addEventListener ('keyup', (e) => {
   } else if(keyValue === 'Escape') {
     calculator.clear()
     calculator.updateDisplay()
-  } else if(keyValue === 'Delete') {
+  } else if(keyValue === 'Delete' || keyValue === "Backspace") {
     calculator.delete()
     calculator.updateDisplay()
   } else if(keyValue === '+' ||

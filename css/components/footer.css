@@ -4,8 +4,8 @@
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  font-size: 24px;
-  margin-top: 20px;
+  font-size: 20px;
+  margin-top: 15px;
   color: rgb(79, 78, 78);
   transition: 0.3s;
 }
